@@ -62,6 +62,7 @@ const ConsultationStackNavi = ({ navigation }) => {
           headerLeft: () => (
             <IconButton
               iconName="add"
+              color="#ffffff"
               onPress={() => navigation.push("Record")}
             />
           ),

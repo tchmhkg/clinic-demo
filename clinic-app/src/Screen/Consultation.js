@@ -73,11 +73,9 @@ const Home = ({ navigation }) => {
   const renderTabBar = (props) => (
     <TabBar
       {...props}
-      // scrollEnabled
-      // tabStyle={{width: 'auto'}}
-      // indicatorStyle={{backgroundColor: theme.colors.primary}}
-      // labelStyle={{color: theme.colors.text}}
-      // style={{backgroundColor: theme.colors.background}}
+      indicatorStyle={{backgroundColor: '#0ECD9D'}}
+      labelStyle={{color: '#0ECD9D'}}
+      style={{backgroundColor: '#ffffff'}}
     />
   );
 

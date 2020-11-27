@@ -1,10 +1,9 @@
-import moment from 'moment';
-import React, { useContext, useEffect, useState } from "react";
-import { FlatList, View, Text, TouchableOpacity, Alert } from "react-native";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { Calendar } from "react-native-calendars";
 import Styled from "styled-components/native";
-import Separator from "~/Component/Separator";
-import { UserContext } from "~/Context/User";
-import { useNavigation } from "@react-navigation/native";
+
+import List from "~/Component/Consultation/List";
 
 const Container = Styled.View`
   flex: 1;
@@ -13,64 +12,45 @@ const Container = Styled.View`
   padding: 10px;
 `;
 
-const Label = Styled.Text`
-    font-size: 18px;
-`;
-
-const ListItem = Styled.TouchableOpacity`
-  padding: 10px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
+const CALENDAR_THEME = {
+  arrowColor: "#000000",
+  selectedDayBackgroundColor: "#0ECD9D",
+  todayTextColor: "#0ECD9D",
+  textMonthFontWeight: "bold",
+  monthTextColor: "#000000",
+};
 
 const Daily = ({ data }) => {
-  const navigation = useNavigation();
-  const { userInfo, logout } = useContext(UserContext);
-  const onPressRecord = (id) => {
-    navigation.navigate("Record", { id });
-  };
-
-  const renderItem = ({ item }) => {
-    return (
-      <ListItem key={item.id} onPress={() => onPressRecord(item.id)}>
-        <View>
-          <Text>Doctor Name: {item?.doctorName}</Text>
-          <Text>Patient Name: {item?.patientName}</Text>
-        </View>
-        <View>
-          <Text>${item?.consultationFee}</Text>
-        </View>
-      </ListItem>
-    );
-  };
-
-  const renderSeparator = () => {
-    return <Separator />;
-  };
-
-  const renderKeyExtractor = React.useCallback(
-    (item) => item?.id?.toString(),
-    []
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format("YYYY-MM-DD")
   );
+  const [filteredData, setFilteredData] = useState([]);
+
+  useEffect(() => {
+    setSelectedDate(moment().format("YYYY-MM-DD"));
+  }, []);
+
+  useEffect(() => {
+    const filtered = data?.filter((record) => {
+      return moment(record.date).format("YYYY-MM-DD") === selectedDate;
+    });
+    setFilteredData(filtered);
+  }, [data, selectedDate, moment]);
 
   return (
     <Container>
-      <Label>Today ({moment().format('YYYY-MMM-DD')})</Label>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        ItemSeparatorComponent={renderSeparator}
-        keyExtractor={renderKeyExtractor}
-        // refreshControl={
-        //   <RefreshControl
-        //     colors={[theme.colors.text]}
-        //     refreshing={isRefreshing}
-        //     onRefresh={handleRefresh}
-        //     tintColor={theme.colors.text}
-        //   />
-        // }
+      <Calendar
+        markedDates={{
+          [selectedDate]: {
+            selected: true,
+          },
+        }}
+        onDayPress={(day) => setSelectedDate(day.dateString)}
+        hideExtraDays
+        theme={CALENDAR_THEME}
       />
+
+      <List data={filteredData} />
     </Container>
   );
 };

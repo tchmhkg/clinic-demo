@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
-  View,
-  Text,
-  TextInput,
   Switch,
   Platform,
   StyleSheet,
   Alert,
+  KeyboardAvoidingView,
 } from "react-native";
 import Styled from "styled-components/native";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -17,7 +15,7 @@ import IconButton from "../Component/IconButton";
 import { UserContext } from "../Context/User";
 import { config } from "../Config";
 
-const Container = Styled.View`
+const Container = Styled(KeyboardAvoidingView)`
   flex: 1;
 `;
 
@@ -100,7 +98,6 @@ const Record = () => {
           },
         });
         if (res?.data?.data) {
-          // console.log("get record => ", res?.data?.data);
           const record = res?.data?.data;
           setReadOnly(true);
           setDoctorName(record?.doctorName);
@@ -132,8 +129,6 @@ const Record = () => {
   const toggleFollowUp = () => setFollowUp((prev) => !prev);
   const onPressSubmit = async () => {
     try {
-      console.log(userInfo);
-
       const res = await axios.post(
         config.host + "/api/consultations",
         {
@@ -177,7 +172,7 @@ const Record = () => {
   };
 
   return (
-    <Container>
+    <Container behavior={Platform.OS == "ios" ? "padding" : "height"}>
       {Platform.OS === "ios" ? (
         <Header>
           <CloseButtonWrapper>
@@ -241,6 +236,7 @@ const Record = () => {
               value={consultationFee}
               onChangeText={setConsultationFee}
               editable={!readOnly}
+              keyboardType="decimal-pad"
             />
           </InputWrapper>
         </Row>

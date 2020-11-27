@@ -1,12 +1,9 @@
 import moment from "moment";
-import React, { useContext, useEffect, useState } from "react";
-import { FlatList, View, Text, TouchableOpacity, Alert } from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import { StyleSheet } from "react-native";
 import Styled from "styled-components/native";
 import CalendarStrip from "react-native-calendar-strip";
-import { useNavigation } from "@react-navigation/native";
-
-import Separator from "~/Component/Separator";
-import { UserContext } from "~/Context/User";
+import List from "~/Component/Consultation/List";
 
 const Container = Styled.View`
   flex: 1;
@@ -14,65 +11,48 @@ const Container = Styled.View`
   background-color: #fafafa;
 `;
 
-const Label = Styled.Text``;
-
-const ListItem = Styled.TouchableOpacity`
-  padding: 10px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
-
 const Weekly = ({ data }) => {
-  const navigation = useNavigation();
-  const { userInfo, logout } = useContext(UserContext);
-  const onPressRecord = (id) => {
-    navigation.navigate("Record", { id });
-  };
+  const [dateRange, setDateRange] = useState({});
+  const [filteredData, setFilteredData] = useState({
+    start: moment().startOf("week"),
+    end: moment().endOf("week"),
+  });
 
-  const renderItem = ({ item }) => {
-    return (
-      <ListItem key={item.id} onPress={() => onPressRecord(item.id)}>
-        <View>
-          <Text>Doctor Name: {item?.doctorName}</Text>
-          <Text>Patient Name: {item?.patientName}</Text>
-        </View>
-        <View>
-          <Text>${item?.consultationFee}</Text>
-        </View>
-      </ListItem>
-    );
-  };
+  useEffect(() => {
+    const filtered = data?.filter((record) => {
+      return moment(record.date).isBetween(
+        dateRange.start,
+        dateRange.end,
+        "days",
+        true
+      );
+    });
+    setFilteredData(filtered);
+  }, [data, dateRange, moment]);
 
-  const renderSeparator = () => {
-    return <Separator />;
-  };
-
-  const renderKeyExtractor = React.useCallback(
-    (item) => item?.id?.toString(),
-    []
-  );
+  const onWeekChanged = useCallback((start, end) => {
+    setDateRange({ start, end });
+  }, []);
 
   return (
     <Container>
-      <Label>Weekly </Label>
-      <CalendarStrip style={{ height: 100 }} />
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        ItemSeparatorComponent={renderSeparator}
-        keyExtractor={renderKeyExtractor}
-        // refreshControl={
-        //   <RefreshControl
-        //     colors={[theme.colors.text]}
-        //     refreshing={isRefreshing}
-        //     onRefresh={handleRefresh}
-        //     tintColor={theme.colors.text}
-        //   />
-        // }
+      <CalendarStrip
+        style={styles.calendar}
+        useIsoWeekday={false}
+        startingDate={moment().startOf("week")}
+        onWeekChanged={onWeekChanged}
       />
+
+      <List data={filteredData} />
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  calendar: {
+    height: 100,
+    padding: 10,
+  },
+});
 
 export default Weekly;
