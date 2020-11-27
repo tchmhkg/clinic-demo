@@ -1,22 +1,71 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TextInput, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Alert,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Platform,
+} from "react-native";
 import Styled from "styled-components/native";
 
 import Button from "~/Component/Button";
 import { UserContext } from "~/Context/User";
 
-const Container = Styled.View`
+const Container = Styled(KeyboardAvoidingView)`
   flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
-const Label = Styled.Text`
-  color: #000000;
 `;
 
-const ButtonContainer = Styled.View`
+const Form = Styled.ScrollView`
+  flex: 1;
+`;
+
+const CloseButtonWrapper = Styled.View`
+  align-items: flex-end;
+`;
+
+const Header = Styled.View`
+  padding: 40px 20px 0 20px;
+`;
+
+const HeaderText = Styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px 0;
+`;
+
+const Label = Styled.Text`
+  font-size: 16px;
+  margin-bottom: 5px;
+`;
+
+const Input = Styled.TextInput`
+  border: 1px solid #b0b0b0;
+  padding: 5px;
+  min-height: ${(props) => (props.multiline ? "80px" : "40px")};
+  font-size: 16px;
+`;
+
+const Row = Styled.View`
   flex-direction: row;
-  margin-top: 20px;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const InputWrapper = Styled.View`
+  flex: 1;
+  margin-left: ${(props) => (props.needMarginLeft ? "5px" : 0)};
+  margin-right: ${(props) => (props.needMarginRight ? "5px" : 0)};
+  margin-bottom: 10px;
+`;
+
+const SignUpRemarkWrapper = Styled.View`
+  border-top-width: 1px;
+  border-color: #b0b0b0;
+  padding: 10px 15px 0 15px;
+  align-items: center;
+  justify-content: center;
 `;
 
 const SignIn = ({ navigation }) => {
@@ -26,9 +75,8 @@ const SignIn = ({ navigation }) => {
 
   const onPressLogin = async () => {
     if (email && password) {
-      console.log('login');
       const res = await login(email, password);
-      console.log(res);
+      // console.log(res);
       if (!res?.success) {
         Alert.alert(res?.data?.message);
       }
@@ -36,37 +84,44 @@ const SignIn = ({ navigation }) => {
   };
 
   return (
-    <Container>
-      <Label>This is SignIn Screen</Label>
-      <View>
-        <Text>Email:</Text>
-        <TextInput
-          style={{ borderWidth: 1, padding: 5 }}
-          autoCapitalize="none"
-          autoCorrect={false}
-          autoCompleteType="off"
-          onChangeText={setEmail}
-          value={email}
-        />
-      </View>
-      <View>
-        <Text>Password:</Text>
-        <TextInput
-          style={{ borderWidth: 1, padding: 5 }}
-          secureTextEntry
-          autoCapitalize="none"
-          autoCorrect={false}
-          autoCompleteType="off"
-          onChangeText={setPassword}
-          value={password}
-        />
-      </View>
-      <ButtonContainer>
-        <Button label="SignIn" onPress={onPressLogin} />
-        <Button label="SignUp" onPress={() => navigation.navigate("SignUp")} />
-      </ButtonContainer>
+    <Container behavior={Platform.OS == "ios" ? "padding" : "height"}>
+      <Form contentContainerStyle={styles.scrollView}>
+        <InputWrapper>
+          <Label>Email:</Label>
+          <Input
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoCompleteType="off"
+            onChangeText={setEmail}
+            value={email}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <Label>Password:</Label>
+          <Input
+            secureTextEntry
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoCompleteType="off"
+            onChangeText={setPassword}
+            value={password}
+          />
+        </InputWrapper>
+        <Button label="Login" onPress={onPressLogin} />
+        <SignUpRemarkWrapper>
+          <Label>Don't have an account?</Label>
+        </SignUpRemarkWrapper>
+        <Button label="Register Now" onPress={() => navigation.navigate("SignUp")} />
+      </Form>
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollView: {
+    padding: 15,
+    justifyContent: "center",
+  },
+});
 
 export default SignIn;

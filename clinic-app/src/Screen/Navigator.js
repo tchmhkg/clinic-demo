@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import {createNativeStackNavigator} from 'react-native-screens/native-stack';
+import { createNativeStackNavigator } from "react-native-screens/native-stack";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -31,17 +31,11 @@ const LoginStackNavi = () => {
         },
       }}
     >
-      <Stack.Screen
-        name="SignIn"
-        component={SignIn}
-        options={{
-          headerShown: false,
-        }}
-      />
+      <Stack.Screen name="Login" component={SignIn} />
       <Stack.Screen
         name="SignUp"
         component={SignUp}
-        options={{ headerBackTitleVisible: false }}
+        options={{ headerBackTitleVisible: false, headerTitle: "Registration" }}
       />
       <Stack.Screen name="ResetPassword" component={ResetPassword} />
     </Stack.Navigator>
@@ -60,13 +54,16 @@ const ConsultationStackNavi = ({ navigation }) => {
           fontWeight: "bold",
         },
       }}
-    >   
+    >
       <Stack.Screen
         name="Consultation"
         component={Consultation}
         options={{
           headerLeft: () => (
-            <IconButton iconName="add" onPress={() => navigation.push('Record')} />
+            <IconButton
+              iconName="add"
+              onPress={() => navigation.push("Record")}
+            />
           ),
         }}
       />
