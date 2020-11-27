@@ -1,19 +1,22 @@
-import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import moment from "moment";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import {
   Switch,
   Platform,
   StyleSheet,
   Alert,
   KeyboardAvoidingView,
+  TouchableOpacity,
 } from "react-native";
 import Styled from "styled-components/native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-import axios from "axios";
-import Button from "../Component/Button";
-import IconButton from "../Component/IconButton";
-import { UserContext } from "../Context/User";
-import { config } from "../Config";
+import Button from "~/Component/Button";
+import IconButton from "~/Component/IconButton";
+import { UserContext } from "~/Context/User";
+import { config } from "~/Config";
 
 const Container = Styled(KeyboardAvoidingView)`
   flex: 1;
@@ -49,6 +52,17 @@ const Input = Styled.TextInput`
   font-size: 16px;
 `;
 
+const DateTimeWrapper = Styled(TouchableOpacity)`
+  border: 1px solid #b0b0b0;
+  padding: 5px;
+  min-height: 40px;
+  justify-content: center;
+`;
+
+const DateTimeText = Styled.Text`
+  font-size: 16px;
+`;
+
 const Row = Styled.View`
   flex-direction: row;
   align-items: center;
@@ -80,10 +94,15 @@ const Record = () => {
   const [diagnosis, setDiagnosis] = useState("");
   const [medication, setMedication] = useState("");
   const [consultationFee, setConsultationFee] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [dateString, setDateString] = useState(
+    moment(new Date()).format("YYYY-MM-DD")
+  );
+  const [time, setTime] = useState(moment().format("HH:mm"));
   const [followUp, setFollowUp] = useState(false);
   const [readOnly, setReadOnly] = useState(false);
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const getConsultation = async () => {
@@ -105,7 +124,7 @@ const Record = () => {
           setDiagnosis(record?.diagnosis);
           setMedication(record?.medication);
           setConsultationFee(record?.consultationFee?.toString());
-          setDate(record?.date);
+          setDateString(record?.date);
           setTime(record?.time);
           setFollowUp(record?.followUp);
         }
@@ -138,7 +157,7 @@ const Record = () => {
           diagnosis,
           medication,
           consultationFee,
-          date,
+          date: dateString,
           time,
           followUp,
         },
@@ -148,7 +167,6 @@ const Record = () => {
           },
         }
       );
-      // console.log(res?.data);
       Alert.alert(res?.data?.message, "", [
         {
           text: "OK",
@@ -167,8 +185,39 @@ const Record = () => {
       ]);
     }
   };
-  const onPressClose = () => {
+  const onPressClose = useCallback(() => {
     navigation.pop();
+  }, [navigation]);
+
+  const onChangeDateTime = (event, selectedDate) => {
+    setShow(Platform.OS === "ios");
+    if (mode === "date") {
+      setDateString(moment(selectedDate).format("YYYY-MM-DD"));
+    } else {
+      setTime(moment(selectedDate).format("HH:mm"));
+    }
+    setDate(selectedDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    if (mode === "date" && show) {
+      setShow(false);
+      return;
+    }
+    showMode("date");
+  };
+
+  const showTimepicker = () => {
+    if (mode === "time" && show) {
+      setShow(false);
+      return;
+    }
+    showMode("time");
   };
 
   return (
@@ -243,13 +292,35 @@ const Record = () => {
         <Row>
           <InputWrapper needMarginRight>
             <Label>Date</Label>
-            <Input value={date} onChangeText={setDate} editable={!readOnly} />
+            {readOnly ? (
+              <Input value={dateString} editable={false} />
+            ) : (
+              <DateTimeWrapper onPress={showDatepicker}>
+                <DateTimeText>{dateString}</DateTimeText>
+              </DateTimeWrapper>
+            )}
           </InputWrapper>
           <InputWrapper needMarginLeft>
             <Label>Time</Label>
-            <Input value={time} onChangeText={setTime} editable={!readOnly} />
+            {readOnly ? (
+              <Input value={moment(time, 'HH:mm:ss').format('HH:mm')} editable={false} />
+            ) : (
+              <DateTimeWrapper onPress={showTimepicker}>
+                <DateTimeText>{time}</DateTimeText>
+              </DateTimeWrapper>
+            )}
           </InputWrapper>
         </Row>
+        {show && (
+          <DateTimePicker
+            value={date}
+            mode={mode}
+            is24Hour
+            display="default"
+            onChange={onChangeDateTime}
+          />
+        )}
+
         <Row>
           <Label>Follow Up</Label>
           <Switch
