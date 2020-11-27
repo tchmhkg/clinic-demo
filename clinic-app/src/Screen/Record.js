@@ -146,7 +146,16 @@ const Record = () => {
   }, [consultationId]);
 
   const toggleFollowUp = () => setFollowUp((prev) => !prev);
-  const onPressSubmit = async () => {
+
+  const onPressSubmit = () => {
+    if(!(doctorName && patientName && diagnosis && medication && consultationFee && dateString && time)) {
+      Alert.alert('Please complete all fields');
+      return;
+    }
+    submitForm();
+  }
+
+  const submitForm = async () => {
     try {
       const res = await axios.post(
         config.host + "/api/consultations",
