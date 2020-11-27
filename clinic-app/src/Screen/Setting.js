@@ -14,10 +14,10 @@ const Row = Styled.View`
   flex: 1;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
   padding: 10px;
   margin: 0 0 10px 0;
   min-height: 50px;
+  flex-wrap: wrap;
 `;
 
 const ItemLabel = Styled.Text`
@@ -27,6 +27,7 @@ const ItemLabel = Styled.Text`
 
 const ItemText = Styled.Text`
   font-size: 16px;
+  text-align: right;
 `;
 
 const ButtonRow = Styled.View`
@@ -51,6 +52,14 @@ const Setting = () => {
         <Row>
           <ItemLabel>Email:</ItemLabel>
           <ItemText>{userInfo?.email}</ItemText>
+        </Row>
+        <Row>
+          <ItemLabel>Phone Number:</ItemLabel>
+          <ItemText>{userInfo?.phoneNumber}</ItemText>
+        </Row>
+        <Row>
+          <ItemLabel>Address:</ItemLabel>
+          <ItemText>{userInfo?.address}</ItemText>
         </Row>
         <ButtonRow>
           <Button label="Logout" onPress={logout} />

@@ -1,8 +1,5 @@
 import React, { useContext, useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
   Alert,
   StyleSheet,
   KeyboardAvoidingView,
@@ -21,20 +18,6 @@ const Container = Styled(KeyboardAvoidingView)`
 
 const Form = Styled.ScrollView`
   flex: 1;
-`;
-
-const CloseButtonWrapper = Styled.View`
-  align-items: flex-end;
-`;
-
-const Header = Styled.View`
-  padding: 40px 20px 0 20px;
-`;
-
-const HeaderText = Styled.Text`
-  font-size: 20px;
-  font-weight: bold;
-  margin: 10px 0;
 `;
 
 const Label = Styled.Text`
@@ -71,7 +54,6 @@ const ButtonRow = Styled.View`
 `;
 
 const SignUp = () => {
-  const navigation = useNavigation();
   const { login } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -109,10 +91,17 @@ const SignUp = () => {
     return false;
   };
 
-  const onPressSubmit = () => {
-    navigation.pop();
-    login();
-  };
+  const validatePassword = () => {
+    if(password.length < 8) {
+      Alert.alert("Password length must longer than 8 characters!");
+      return false;
+    }
+    if (!password || password !== confirmPassword) {
+      Alert.alert("Password & Confirm Password mismatch!");
+      return false;
+    }
+    return true;
+  }
 
   const onPressRegister = () => {
     if (!(email && password && phoneNumber && clinicName && address)) {
@@ -121,6 +110,9 @@ const SignUp = () => {
     }
     if (!validateEmail()) {
       Alert.alert("Email format incorrect!");
+      return;
+    }
+    if(!validatePassword()) {
       return;
     }
     if (!password || password !== confirmPassword) {
@@ -202,7 +194,6 @@ const SignUp = () => {
         <ButtonRow>
           <Button label="Submit" onPress={onPressRegister} />
         </ButtonRow>
-        {/* <Button label="Submit" onPress={onPressSubmit} /> */}
       </Form>
     </Container>
   );

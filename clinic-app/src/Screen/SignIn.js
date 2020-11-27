@@ -66,6 +66,7 @@ const SignUpRemarkWrapper = Styled.View`
   padding: 10px 15px 0 15px;
   align-items: center;
   justify-content: center;
+  margin-top: 10px;
 `;
 
 const SignIn = ({ navigation }) => {
