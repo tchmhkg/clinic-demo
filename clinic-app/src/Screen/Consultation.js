@@ -83,6 +83,7 @@ const Home = ({ navigation }) => {
     <Container>
       <TabView
         lazy
+        swipeEnabled={false}
         navigationState={{ index: tabIndex, routes }}
         renderScene={renderScene}
         renderTabBar={renderTabBar}

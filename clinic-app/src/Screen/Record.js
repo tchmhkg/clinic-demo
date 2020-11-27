@@ -190,13 +190,14 @@ const Record = () => {
   }, [navigation]);
 
   const onChangeDateTime = (event, selectedDate) => {
+    const currentDate = selectedDate || date
     setShow(Platform.OS === "ios");
     if (mode === "date") {
-      setDateString(moment(selectedDate).format("YYYY-MM-DD"));
+      setDateString(moment(currentDate).format("YYYY-MM-DD"));
     } else {
-      setTime(moment(selectedDate).format("HH:mm"));
+      setTime(moment(currentDate).format("HH:mm"));
     }
-    setDate(selectedDate);
+    setDate(currentDate);
   };
 
   const showMode = (currentMode) => {
@@ -237,73 +238,70 @@ const Record = () => {
       ) : null}
       <Form contentContainerStyle={styles.scrollView}>
         <Row>
-          <InputWrapper needMarginRight>
+          <InputWrapper needMarginRight pointerEvents={readOnly ? 'none' : 'auto'}>
             <Label>Doctor Name</Label>
             <Input
               onChangeText={setDoctorName}
               value={doctorName}
-              editable={!readOnly}
             />
           </InputWrapper>
-          <InputWrapper needMarginLeft>
+          <InputWrapper needMarginLeft pointerEvents={readOnly ? 'none' : 'auto'}>
             <Label>Patient Name</Label>
             <Input
               onChangeText={setPatientName}
               value={patientName}
-              editable={!readOnly}
             />
           </InputWrapper>
         </Row>
         <Row>
-          <InputWrapper>
+          <InputWrapper pointerEvents={readOnly ? 'none' : 'auto'}>
             <Label>Diagnosis</Label>
             <Input
               value={diagnosis}
               onChangeText={setDiagnosis}
               multiline
               textAlignVertical="top"
-              editable={!readOnly}
             />
           </InputWrapper>
         </Row>
         <Row>
-          <InputWrapper>
+          <InputWrapper pointerEvents={readOnly ? 'none' : 'auto'}>
             <Label>Medication</Label>
             <Input
               value={medication}
               onChangeText={setMedication}
               multiline
               textAlignVertical="top"
-              editable={!readOnly}
+              // editable={!readOnly}
             />
           </InputWrapper>
         </Row>
         <Row>
-          <InputWrapper>
+          <InputWrapper pointerEvents={readOnly ? 'none' : 'auto'}>
             <Label>Consultation Fee</Label>
             <Input
               value={consultationFee}
               onChangeText={setConsultationFee}
-              editable={!readOnly}
+              // editable={!readOnly}
               keyboardType="decimal-pad"
             />
           </InputWrapper>
         </Row>
         <Row>
-          <InputWrapper needMarginRight>
+          <InputWrapper needMarginRight pointerEvents={readOnly ? 'none' : 'auto'}>
             <Label>Date</Label>
             {readOnly ? (
-              <Input value={dateString} editable={false} />
+              <Input value={dateString} />
             ) : (
               <DateTimeWrapper onPress={showDatepicker}>
                 <DateTimeText>{dateString}</DateTimeText>
               </DateTimeWrapper>
             )}
           </InputWrapper>
-          <InputWrapper needMarginLeft>
+          <InputWrapper needMarginLeft pointerEvents={readOnly ? 'none' : 'auto'}>
             <Label>Time</Label>
             {readOnly ? (
-              <Input value={moment(time, 'HH:mm:ss').format('HH:mm')} editable={false} />
+              <Input value={moment(time, 'HH:mm:ss').format('HH:mm')} />
             ) : (
               <DateTimeWrapper onPress={showTimepicker}>
                 <DateTimeText>{time}</DateTimeText>

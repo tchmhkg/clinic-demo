@@ -1,19 +1,35 @@
 import React, { useContext } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createNativeStackNavigator } from "react-native-screens/native-stack";
+import { Platform } from "react-native";
 
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import { MaterialIcons } from "@expo/vector-icons";
+import Styled from "styled-components/native";
+
 import { UserContext } from "~/Context/User";
 
-import SignIn from "./SignIn";
-import SignUp from "./SignUp";
-import ResetPassword from "./ResetPassword";
-import Consultation from "./Consultation";
-import Setting from "./Setting";
-import Record from "./Record";
-import IconButton from "../Component/IconButton";
+import SignIn from "~/Screen/SignIn";
+import SignUp from "~/Screen/SignUp";
+import ResetPassword from "~/Screen/ResetPassword";
+import Consultation from "~/Screen/Consultation";
+import Setting from "~/Screen/Setting";
+import Record from "~/Screen/Record";
+
+import IconButton from "~/Component/IconButton";
+
+const HeaderLeftButton = Styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const HeaderLeftTitle = Styled.Text`
+  margin-left: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+`;
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -60,11 +76,16 @@ const ConsultationStackNavi = ({ navigation }) => {
         component={Consultation}
         options={{
           headerLeft: () => (
-            <IconButton
-              iconName="add"
-              color="#ffffff"
-              onPress={() => navigation.push("Record")}
-            />
+            <HeaderLeftButton>
+              <IconButton
+                iconName="add"
+                color="#ffffff"
+                onPress={() => navigation.push("Record")}
+              />
+              {Platform.OS === "android" ? (
+                <HeaderLeftTitle>Consultation</HeaderLeftTitle>
+              ) : null}
+            </HeaderLeftButton>
           ),
         }}
       />

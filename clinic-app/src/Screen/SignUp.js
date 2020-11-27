@@ -82,14 +82,14 @@ const SignUp = () => {
 
   const formSubmit = async () => {
     const res = await axios.post(config.host + "/api/auth/signup", {
-      email: email || "rntrumanx@t.com",
-      password: password || "12345678",
-      clinicName: clinicName || "rn clinic",
-      phoneNumber: phoneNumber || "98765678",
-      address: address || "fake address",
+      email,
+      password,
+      clinicName,
+      phoneNumber,
+      address,
     });
     if (res?.data?.success) {
-      const loginRes = await login("rntrumanx@t.com", "12345678");
+      const loginRes = await login(email, password);
       if (!loginRes?.success) {
         Alert.alert("login failed,", loginRes?.message);
       }
@@ -98,14 +98,29 @@ const SignUp = () => {
     }
   };
 
+  const validateEmail = () => {
+    if (
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+        email
+      )
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const onPressSubmit = () => {
     navigation.pop();
     login();
   };
 
   const onPressRegister = () => {
-    if(!(email && password && phoneNumber && clinicName && address)) {
+    if (!(email && password && phoneNumber && clinicName && address)) {
       Alert.alert("Please complete all fields.");
+      return;
+    }
+    if (!validateEmail()) {
+      Alert.alert("Email format incorrect!");
       return;
     }
     if (!password || password !== confirmPassword) {
@@ -176,11 +191,11 @@ const SignUp = () => {
           <InputWrapper>
             <Label>Address</Label>
             <Input
-              autoCorrect="none"
               autoCompleteType="off"
               onChangeText={setAddress}
               value={address}
               multiline
+              textAlignVertical="top"
             />
           </InputWrapper>
         </Row>
