@@ -1,12 +1,13 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { FlatList, View, Text, TouchableOpacity, Alert } from "react-native";
+import { Alert, Dimensions } from "react-native";
 import Styled from "styled-components/native";
-import Separator from "~/Component/Separator";
-
-import Button from "~/Component/Button";
-import { UserContext } from "../Context/User";
-import { config } from "../Config";
+import { TabView, TabBar } from "react-native-tab-view";
+import Daily from "~/Component/Consultation/Daily";
+import Weekly from "~/Component/Consultation/Weekly";
+import Monthly from "~/Component/Consultation/Monthly";
+import { UserContext } from "~/Context/User";
+import { config } from "~/Config";
 
 const Container = Styled.View`
   flex: 1;
@@ -14,18 +15,18 @@ const Container = Styled.View`
   background-color: #fafafa;
 `;
 
-const Label = Styled.Text``;
-
-const ListItem = Styled.TouchableOpacity`
-  padding: 10px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
+const VIEWS = ["daily", "weekly", "monthly"];
 
 const Home = ({ navigation }) => {
   const { userInfo, logout } = useContext(UserContext);
   const [consultations, setConsultations] = useState([]);
+  const [tabIndex, setTabIndex] = useState(0);
+
+  const routes = VIEWS.map((view, idx) => ({
+    key: view,
+    title: view,
+    index: idx,
+  }));
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
@@ -38,63 +39,57 @@ const Home = ({ navigation }) => {
             userId: userInfo?.id,
           },
         });
-        // console.log(res?.data);
+        console.log(res?.data?.data);
         if (res?.data?.data) {
           setConsultations(res?.data?.data);
         }
       } catch (err) {
         console.log(err);
-        Alert.alert(err?.response?.data?.message, '', [
-          { text: "OK", onPress: () => err?.response?.status === 401 ? logout() : {}, style:"cancel" }
+        Alert.alert(err?.response?.data?.message, "", [
+          {
+            text: "OK",
+            onPress: () => (err?.response?.status === 401 ? logout() : {}),
+            style: "cancel",
+          },
         ]);
       }
     });
     return unsubscribe;
   }, [userInfo?.id]);
 
-  const onPressRecord = (id) => {
-    navigation.navigate("Record", { id });
+  const _handleIndexChange = (index) => setTabIndex(index);
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case "daily":
+        return <Daily data={consultations} />;
+      case "weekly":
+        return <Weekly data={consultations} />;
+      case "monthly":
+        return <Monthly data={consultations} />;
+    }
   };
 
-  const renderItem = ({ item }) => {
-    return (
-      <ListItem key={item.id} onPress={() => onPressRecord(item.id)}>
-        <View>
-          <Text>Doctor Name: {item?.doctorName}</Text>
-          <Text>Patient Name: {item?.patientName}</Text>
-        </View>
-        <View>
-          <Text>${item?.consultationFee}</Text>
-        </View>
-      </ListItem>
-    );
-  };
-
-  const renderSeparator = () => {
-    return <Separator />;
-  };
-
-  const renderKeyExtractor = React.useCallback(
-    (item) => item?.id?.toString(),
-    []
+  const renderTabBar = (props) => (
+    <TabBar
+      {...props}
+      // scrollEnabled
+      // tabStyle={{width: 'auto'}}
+      // indicatorStyle={{backgroundColor: theme.colors.primary}}
+      // labelStyle={{color: theme.colors.text}}
+      // style={{backgroundColor: theme.colors.background}}
+    />
   );
 
   return (
     <Container>
-      <Label>consultations page</Label>
-      <FlatList
-        data={consultations}
-        renderItem={renderItem}
-        ItemSeparatorComponent={renderSeparator}
-        keyExtractor={renderKeyExtractor}
-        // refreshControl={
-        //   <RefreshControl
-        //     colors={[theme.colors.text]}
-        //     refreshing={isRefreshing}
-        //     onRefresh={handleRefresh}
-        //     tintColor={theme.colors.text}
-        //   />
-        // }
+      <TabView
+        lazy
+        navigationState={{ index: tabIndex, routes }}
+        renderScene={renderScene}
+        renderTabBar={renderTabBar}
+        onIndexChange={_handleIndexChange}
+        initialLayout={{ width: Dimensions.get("window").width }}
       />
     </Container>
   );

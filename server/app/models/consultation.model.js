@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.FLOAT,
     },
     date: {
-      type: Sequelize.DATE,
+      type: Sequelize.DATEONLY,
     },
     time: {
       type: Sequelize.TIME,
