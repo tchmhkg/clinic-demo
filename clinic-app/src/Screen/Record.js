@@ -16,6 +16,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Button from "~/Component/Common/Button";
 import Input from "~/Component/Common/Input";
 import IconButton from "~/Component/Common/IconButton";
+import Spinner from "~/Component/Common/Spinner";
+
 import { UserContext } from "~/Context/User";
 import { config } from "~/Config";
 
@@ -58,6 +60,7 @@ const DateTimeWrapper = Styled(TouchableOpacity)`
   padding: 5px;
   min-height: 40px;
   justify-content: center;
+  background-color: #ffffff;
 `;
 
 const DateTimeText = Styled.Text`
@@ -97,10 +100,12 @@ const Record = () => {
   const [readOnly, setReadOnly] = useState(false);
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getConsultation = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(config.host + "/api/consultations", {
           headers: {
             Authorization: "Bearer " + userInfo?.accessToken,
@@ -122,8 +127,10 @@ const Record = () => {
           setTime(record?.time);
           setFollowUp(record?.followUp);
         }
+        setLoading(false);
       } catch (err) {
         console.log(err);
+        setLoading(false);
         Alert.alert(err?.response?.data?.message, "", [
           {
             text: "OK",
@@ -161,6 +168,7 @@ const Record = () => {
 
   const submitForm = async () => {
     try {
+      setLoading(true);
       const res = await axios.post(
         config.host + "/api/consultations",
         {
@@ -180,6 +188,7 @@ const Record = () => {
           },
         }
       );
+      setLoading(false);
       Alert.alert(res?.data?.message, "", [
         {
           text: "OK",
@@ -189,6 +198,7 @@ const Record = () => {
       ]);
     } catch (err) {
       console.log(err);
+      setLoading(false);
       Alert.alert(err?.response?.data?.message, "", [
         {
           text: "OK",
@@ -235,6 +245,7 @@ const Record = () => {
   };
 
   return (
+    <>
     <Container behavior={Platform.OS == "ios" ? "padding" : "height"}>
       {Platform.OS === "ios" ? (
         <Header>
@@ -354,6 +365,10 @@ const Record = () => {
         ) : null}
       </Form>
     </Container>
+    {loading ? (
+        <Spinner />
+      ) : null}
+    </>
   );
 };
 

@@ -3,6 +3,7 @@ import { Alert } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { config } from "~/Config";
+import Spinner from "~/Component/Common/Spinner";
 
 const defaultContext = {
   userInfo: undefined,
@@ -15,6 +16,7 @@ const UserContext = createContext(defaultContext);
 
 const UserContextProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(undefined);
+  const [loading, setLoading] = useState(false);
 
   const login = async (email, password) => {
     try {
@@ -70,7 +72,9 @@ const UserContextProvider = ({ children }) => {
         if (token) {
           try {
             console.log("need verify token");
+            setLoading(true);
             const isValid = await verifyToken(token);
+            setLoading(false)
             if (isValid) {
               console.log("verify success");
               AsyncStorage.getItem("user").then((user) => {
@@ -81,6 +85,7 @@ const UserContextProvider = ({ children }) => {
               logout();
             }
           } catch (err) {
+            setLoading(false);
             console.log("verify err => ", err);
             logout();
           }
@@ -110,7 +115,10 @@ const UserContextProvider = ({ children }) => {
         logout,
       }}
     >
+    <>
       {children}
+      {loading ? <Spinner /> : null}
+    </>
     </UserContext.Provider>
   );
 };

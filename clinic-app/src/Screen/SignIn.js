@@ -5,6 +5,7 @@ import Styled from "styled-components/native";
 import Button from "~/Component/Common/Button";
 import Input from "~/Component/Common/Input";
 import FormContainer from "~/Component/Common/FormContainer";
+import Spinner from "~/Component/Common/Spinner";
 import { UserContext } from "~/Context/User";
 
 const Label = Styled.Text`
@@ -25,18 +26,22 @@ const SignIn = ({ navigation }) => {
   const { login } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onPressLogin = async () => {
     if (email && password) {
+      setLoading(true);
       const res = await login(email, password);
       // console.log(res);
       if (!res?.success) {
         Alert.alert(res?.message);
       }
+      setLoading(false);
     }
   };
 
   return (
+    <>
     <FormContainer>
       <Input
         label="Email"
@@ -59,6 +64,10 @@ const SignIn = ({ navigation }) => {
         onPress={() => navigation.navigate("SignUp")}
       />
     </FormContainer>
+    {loading ? (
+      <Spinner />
+    ) : null}
+    </>
   );
 };
 

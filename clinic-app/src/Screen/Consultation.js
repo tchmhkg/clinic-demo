@@ -2,10 +2,13 @@ import axios from "axios";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Alert, Dimensions } from "react-native";
 import { TabView, TabBar } from "react-native-tab-view";
+
 import Daily from "~/Component/Consultation/Daily";
 import Weekly from "~/Component/Consultation/Weekly";
 import Monthly from "~/Component/Consultation/Monthly";
 import Container from "~/Component/Common/Container";
+import Spinner from "~/Component/Common/Spinner";
+
 import { UserContext } from "~/Context/User";
 import { config } from "~/Config";
 
@@ -15,6 +18,7 @@ const Home = ({ navigation }) => {
   const { userInfo, logout } = useContext(UserContext);
   const [consultations, setConsultations] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const routes = VIEWS.map((view, idx) => ({
     key: view,
@@ -25,6 +29,7 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
       try {
+        setLoading(true);
         const res = await axios.get(config.host + "/api/consultations", {
           headers: {
             Authorization: "Bearer " + userInfo?.accessToken,
@@ -33,11 +38,13 @@ const Home = ({ navigation }) => {
             userId: userInfo?.id,
           },
         });
+        setLoading(false)
         console.log(res?.data?.data);
         if (res?.data?.data) {
           setConsultations(res?.data?.data);
         }
       } catch (err) {
+        setLoading(false);
         console.log(err);
         Alert.alert(err?.response?.data?.message, "", [
           {
@@ -74,6 +81,7 @@ const Home = ({ navigation }) => {
   ), []);
 
   return (
+    <>
     <Container>
       <TabView
         lazy
@@ -85,6 +93,10 @@ const Home = ({ navigation }) => {
         initialLayout={{ width: Dimensions.get("window").width }}
       />
     </Container>
+    {loading ? (
+      <Spinner />
+    ) : null}
+    </>
   );
 };
 

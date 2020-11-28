@@ -11,6 +11,7 @@ const StyledInput = Styled.TextInput`
   padding: 5px;
   min-height: ${(props) => (props.multiline ? "80px" : "40px")};
   font-size: 16px;
+  background-color: #ffffff;
 `;
 
 const InputWrapper = Styled.View`
