@@ -6,9 +6,12 @@ const mysql = require("mysql2/promise");
 const config = require("./app/config/db.config.js");
 
 const app = express();
+require("dotenv").config();
+
+const isProduction = process.env.NODE_ENV === "production";
 
 var corsOptions = {
-  origin: "*",//"http://localhost:3001",
+  origin: "*", //"http://localhost:3001",
 };
 
 app.use(cors(corsOptions));
@@ -20,20 +23,22 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = require("./app/models");
-const Op = db.Sequelize.Op;
-const Role = db.role;
 const User = db.user;
 
 // Production
-db.sequelize.sync();
+// db.sequelize.sync();
 // Development
-// createDb().then(() => {
-//     db.sequelize.sync({ force: true }).then(() => {
-//         console.log("Drop and Resync Db");
-//         initial();
-//       });
-// });
-
+createDb().then(() => {
+  db.sequelize.sync({ force: !isProduction }).then(() => {
+    if (!isProduction) {
+      console.log("Drop and Resync Db");
+      initial();
+    }
+  });
+})
+.catch(err => {
+  console.log(err);
+});
 
 // simple route
 app.get("/", (req, res) => {
@@ -61,34 +66,15 @@ async function createDb() {
 }
 
 function initial() {
-  Role.create({
-    id: 1,
-    name: "user",
-  });
-
-  Role.create({
-    id: 2,
-    name: "admin",
-  });
-
   User.create({
     id: 1,
     email: "hqclinic@truman.com",
     password: bcrypt.hashSync("hq@1234", 8),
     clinicName: "HQ",
-    phoneNumber: "98209852",
+    phoneNumber: "98767890",
     address: "12/F, HQ Building, Clinic Road, Kowloon",
-    roles: ["admin"],
-  }).then((user) => {
-    Role.findAll({
-      where: {
-        name: {
-          [Op.or]: ["admin"],
-        },
-      },
-    }).then((roles) => {
-      user.setRoles(roles);
-    });
+  }).catch(function (err) {
+    console.log(err);
   });
 
   User.create({
@@ -98,16 +84,7 @@ function initial() {
     clinicName: "HK Health Clinic",
     phoneNumber: "29987890",
     address: "1/F, Health Tower, Clinic Road, New Territories",
-    roles: ["user"],
-  }).then((user) => {
-    Role.findAll({
-      where: {
-        name: {
-          [Op.or]: ["user"],
-        },
-      },
-    }).then((roles) => {
-      user.setRoles(roles);
-    });
+  }).catch(function (err) {
+    console.log(err);
   });
 }

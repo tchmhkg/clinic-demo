@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = {
-  secret: "truman-clinic-secret-key",
+  secret: process.env.AUTH_SECRET,
 };

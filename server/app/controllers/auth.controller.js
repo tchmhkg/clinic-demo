@@ -1,9 +1,8 @@
 const db = require("../models");
 const config = require("../config/auth.config");
 const User = db.user;
-const Role = db.role;
 
-const Op = db.Sequelize.Op;
+require("dotenv").config();
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -43,30 +42,10 @@ exports.signup = (req, res) => {
     address: req.body.address,
   })
     .then((user) => {
-      if (req.body.roles) {
-        Role.findAll({
-          where: {
-            name: {
-              [Op.or]: req.body.roles,
-            },
-          },
-        }).then((roles) => {
-          user.setRoles(roles).then(() => {
-            res.send({
-              success: true,
-              message: "User was registered successfully!",
-            });
-          });
-        });
-      } else {
-        // user role = 1
-        user.setRoles([1]).then(() => {
-          res.send({
-            success: true,
-            message: "User was registered successfully!",
-          });
-        });
-      }
+      res.send({
+        success: true,
+        message: "User was registered successfully!",
+      });
     })
     .catch((err) => {
       res.status(500).send({ success: false, message: err.message });
@@ -100,26 +79,19 @@ exports.signin = (req, res) => {
       }
 
       var token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400, // 24 hours
+        expiresIn: process.env.TOKEN_EXPIRY_TIME, // 24 hours
       });
 
-      var authorities = [];
-      user.getRoles().then((roles) => {
-        for (let i = 0; i < roles.length; i++) {
-          authorities.push("ROLE_" + roles[i].name.toUpperCase());
-        }
-        res.status(200).send({
-          success: true,
-          user: {
-            id: user.id,
-            email: user.email,
-            clinicName: user.clinicName,
-            phoneNumber: user.phoneNumber,
-            address: user.address,
-            roles: authorities,
-            accessToken: token,
-          },
-        });
+      res.status(200).send({
+        success: true,
+        user: {
+          id: user.id,
+          email: user.email,
+          clinicName: user.clinicName,
+          phoneNumber: user.phoneNumber,
+          address: user.address,
+          accessToken: token,
+        },
       });
     })
     .catch((err) => {
