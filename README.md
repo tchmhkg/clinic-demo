@@ -1,0 +1,44 @@
+# Installation
+
+## Server
+
+Change directory to server folder and install modules
+``` cd <ROOT_DIRECTORY>/server ```
+``` yarn install ```
+
+Copy .env.example file to .env
+``` cp .env.example .env ```
+then edit .env variables
+
+Run the server
+``` yarn start ```
+
+## Clinic app
+
+Change directory to client app folder and install modules
+``` cd <ROOT_DIRECTORY>/client-app ```
+``` yarn install ```
+
+Copy .env.example file to .env
+``` cp .env.example .env ```
+then edit .env variables
+
+Run the app
+``` yarn start ```
+
+- Demo account
+
+  username: ``` hqclinic@truman.com ```
+  password: ``` hq@1234 ```  
+
+- Registration rules
+
+  1. All fields are required
+  2. Password must longer than 8 characters  
+
+- Create consultation record rules
+
+  1. All fields are required
+  
+- Login token expiry time
+  Default 24 hours  

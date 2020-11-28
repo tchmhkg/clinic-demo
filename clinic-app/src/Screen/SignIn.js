@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Alert, StyleSheet } from "react-native";
+import { Alert } from "react-native";
 import Styled from "styled-components/native";
 
 import Button from "~/Component/Common/Button";
@@ -10,12 +10,6 @@ import { UserContext } from "~/Context/User";
 const Label = Styled.Text`
   font-size: 16px;
   margin-bottom: 5px;
-`;
-
-const Row = Styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
 `;
 
 const SignUpRemarkWrapper = Styled.View`
@@ -29,8 +23,8 @@ const SignUpRemarkWrapper = Styled.View`
 
 const SignIn = ({ navigation }) => {
   const { login } = useContext(UserContext);
-  const [email, setEmail] = useState("hqclinic@truman.com");
-  const [password, setPassword] = useState("hq@1234");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const onPressLogin = async () => {
     if (email && password) {
