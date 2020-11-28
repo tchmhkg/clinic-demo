@@ -23,11 +23,13 @@ const Row = Styled.View`
 const ItemLabel = Styled.Text`
   font-size: 16px;
   font-weight: bold;
+  flex: 1;
 `;
 
 const ItemText = Styled.Text`
   font-size: 16px;
   text-align: right;
+  flex: 1;
 `;
 
 const ButtonRow = Styled.View`

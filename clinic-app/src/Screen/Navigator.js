@@ -12,7 +12,6 @@ import { UserContext } from "~/Context/User";
 
 import SignIn from "~/Screen/SignIn";
 import SignUp from "~/Screen/SignUp";
-import ResetPassword from "~/Screen/ResetPassword";
 import Consultation from "~/Screen/Consultation";
 import Setting from "~/Screen/Setting";
 import Record from "~/Screen/Record";
@@ -53,7 +52,6 @@ const LoginStackNavi = () => {
         component={SignUp}
         options={{ headerBackTitleVisible: false, headerTitle: "Registration" }}
       />
-      <Stack.Screen name="ResetPassword" component={ResetPassword} />
     </Stack.Navigator>
   );
 };
