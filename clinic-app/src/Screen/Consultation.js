@@ -1,13 +1,10 @@
 import axios from "axios";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState, useLayoutEffect } from "react";
 import { Alert, Dimensions } from "react-native";
 import { TabView, TabBar } from "react-native-tab-view";
 
-import Daily from "~/Component/Consultation/Daily";
-import Weekly from "~/Component/Consultation/Weekly";
-import Monthly from "~/Component/Consultation/Monthly";
-import Container from "~/Component/Common/Container";
-import Spinner from "~/Component/Common/Spinner";
+import { Daily, Weekly, Monthly } from "~/Component/Consultation";
+import { Container, Spinner, IconButton } from "~/Component/Common";
 
 import { UserContext } from "~/Context/User";
 import { config } from "~/Config";
@@ -26,37 +23,53 @@ const Home = ({ navigation }) => {
     index: idx,
   }));
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <IconButton
+          iconName="refresh"
+          color="#ffffff"
+          onPress={getConsultations}
+        />
+      ),
+    });
+  }, [navigation]);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get(config.host + "/api/consultations", {
-          headers: {
-            Authorization: "Bearer " + userInfo?.accessToken,
-          },
-          params: {
-            userId: userInfo?.id,
-          },
-        });
-        setLoading(false)
-        console.log(res?.data?.data);
-        if (res?.data?.data) {
-          setConsultations(res?.data?.data);
-        }
-      } catch (err) {
-        setLoading(false);
-        console.log(err);
-        Alert.alert(err?.response?.data?.message, "", [
-          {
-            text: "OK",
-            onPress: () => (err?.response?.status === 401 ? logout() : {}),
-            style: "cancel",
-          },
-        ]);
-      }
+      getConsultations();
     });
     return unsubscribe;
   }, [userInfo?.id]);
+
+  const getConsultations = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(config.host + "/api/consultations", {
+        headers: {
+          Authorization: "Bearer " + userInfo?.accessToken,
+        },
+        params: {
+          userId: userInfo?.id,
+        },
+      });
+      setLoading(false)
+
+      if (res?.data?.data) {
+        setConsultations(res?.data?.data);
+      }
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      Alert.alert(err?.response?.data?.message, "", [
+        {
+          text: "OK",
+          onPress: () => (err?.response?.status === 401 ? logout() : {}),
+          style: "cancel",
+        },
+      ]);
+    }
+  }
 
   const _handleIndexChange = useCallback((index) => setTabIndex(index), []);
 

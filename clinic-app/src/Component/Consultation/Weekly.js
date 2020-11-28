@@ -2,8 +2,9 @@ import moment from "moment";
 import React, { useEffect, useState, useCallback } from "react";
 import { StyleSheet } from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
+
 import List from "~/Component/Consultation/List";
-import Container from "~/Component/Common/Container";
+import { Container } from "~/Component/Common";
 
 const Weekly = ({ data }) => {
   const [dateRange, setDateRange] = useState({});

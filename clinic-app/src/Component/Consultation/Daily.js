@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Calendar } from "react-native-calendars";
 
 import List from "~/Component/Consultation/List";
-import Container from "~/Component/Common/Container";
+import { Container } from "~/Component/Common";
 
 const CALENDAR_THEME = {
   arrowColor: "#000000",

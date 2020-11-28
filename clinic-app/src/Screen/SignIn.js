@@ -2,10 +2,7 @@ import React, { useContext, useState } from "react";
 import { Alert } from "react-native";
 import Styled from "styled-components/native";
 
-import Button from "~/Component/Common/Button";
-import Input from "~/Component/Common/Input";
-import FormContainer from "~/Component/Common/FormContainer";
-import Spinner from "~/Component/Common/Spinner";
+import { Button, Input, FormContainer, Spinner } from "~/Component/Common";
 import { UserContext } from "~/Context/User";
 
 const Label = Styled.Text`

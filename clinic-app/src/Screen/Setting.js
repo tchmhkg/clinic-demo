@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import Styled from "styled-components/native";
-import Button from "~/Component/Common/Button";
-import Container from "~/Component/Common/Container";
-import SettingRow from "~/Component/SettingRow";
+
+import { Button, Container } from "~/Component/Common";
+import { SettingRow } from "~/Component";
+
 import { UserContext } from "~/Context/User";
 
 const ButtonRow = Styled.View`

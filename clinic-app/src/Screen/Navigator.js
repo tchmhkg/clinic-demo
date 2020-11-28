@@ -10,13 +10,9 @@ import Styled from "styled-components/native";
 
 import { UserContext } from "~/Context/User";
 
-import SignIn from "~/Screen/SignIn";
-import SignUp from "~/Screen/SignUp";
-import Consultation from "~/Screen/Consultation";
-import Setting from "~/Screen/Setting";
-import Record from "~/Screen/Record";
+import { SignIn, SignUp, Consultation, Setting, Record } from "~/Screen";
 
-import IconButton from "~/Component/Common/IconButton";
+import { IconButton } from "~/Component/Common";
 
 const HeaderLeftButton = Styled.View`
   flex-direction: row;

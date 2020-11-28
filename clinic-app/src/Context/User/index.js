@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { config } from "~/Config";
-import Spinner from "~/Component/Common/Spinner";
+import { Spinner } from "~/Component/Common";
 
 const defaultContext = {
   userInfo: undefined,
@@ -51,7 +51,7 @@ const UserContextProvider = ({ children }) => {
       const res = await axios.post(config.host + "/api/auth/verify", {
         token,
       });
-      console.log(res?.data);
+      // console.log(res?.data);
       if (res?.data?.success) {
         return true;
       }

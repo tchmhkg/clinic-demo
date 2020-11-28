@@ -1,9 +1,9 @@
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 
-import MonthPicker from "~/Component/MonthPicker";
+import { MonthPicker } from "~/Component";
 import List from "~/Component/Consultation/List";
-import Container from "~/Component/Common/Container";
+import { Container } from "~/Component/Common";
 
 const Monthly = ({ data }) => {
   const [filteredData, setFilteredData] = useState([]);

@@ -13,10 +13,7 @@ import Styled from "styled-components/native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-import Button from "~/Component/Common/Button";
-import Input from "~/Component/Common/Input";
-import IconButton from "~/Component/Common/IconButton";
-import Spinner from "~/Component/Common/Spinner";
+import { Button, Input, IconButton, Spinner } from "~/Component/Common";
 
 import { UserContext } from "~/Context/User";
 import { config } from "~/Config";
@@ -40,7 +37,7 @@ const Header = Styled.View`
 const HeaderText = Styled.Text`
   font-size: 20px;
   font-weight: bold;
-  margin: 10px 0;
+  margin: 10px -5px;
 `;
 
 const Label = Styled.Text`
@@ -53,6 +50,7 @@ const StyledInput = Styled.TextInput`
   padding: 5px;
   min-height: ${(props) => (props.multiline ? "80px" : "40px")};
   font-size: 16px;
+  background-color: #ffffff;
 `;
 
 const DateTimeWrapper = Styled(TouchableOpacity)`
@@ -246,128 +244,126 @@ const Record = () => {
 
   return (
     <>
-    <Container behavior={Platform.OS == "ios" ? "padding" : "height"}>
-      {Platform.OS === "ios" ? (
-        <Header>
-          <CloseButtonWrapper>
-            <IconButton
-              iconName="close"
-              size={32}
-              color="#000"
-              onPress={onPressClose}
-            />
-          </CloseButtonWrapper>
-          <HeaderText>Record</HeaderText>
-        </Header>
-      ) : null}
-      <Form contentContainerStyle={styles.scrollView}>
-        <Row>
-          <Input
-            containerOptions={{
-              needMarginRight: true,
-            }}
-            readOnly={readOnly}
-            label="Doctor Name"
-            value={doctorName}
-            onChangeText={setDoctorName}
-          />
-          <Input
-            containerOptions={{
-              needMarginLeft: true,
-            }}
-            readOnly={readOnly}
-            label="Patient Name"
-            value={patientName}
-            onChangeText={setPatientName}
-          />
-        </Row>
-        <Row>
-          <Input
-            readOnly={readOnly}
-            label="Diagnosis"
-            value={diagnosis}
-            onChangeText={setDiagnosis}
-            multiline
-          />
-        </Row>
-        <Row>
-          <Input
-            readOnly={readOnly}
-            label="Medication"
-            value={medication}
-            onChangeText={setMedication}
-            multiline
-          />
-        </Row>
-        <Row>
-          <Input
-            readOnly={readOnly}
-            label="Consultation Fee"
-            value={consultationFee}
-            onChangeText={setConsultationFee}
-            keyboardType="decimal-pad"
-          />
-        </Row>
-        <Row>
-          <Input
-            containerOptions={{
-              needMarginRight: true,
-            }}
-            readOnly={readOnly}
-            label="Date"
-          >
-            {readOnly ? (
-              <StyledInput value={dateString} />
-            ) : (
-              <DateTimeWrapper onPress={showDatepicker}>
-                <DateTimeText>{dateString}</DateTimeText>
-              </DateTimeWrapper>
-            )}
-          </Input>
-          <Input
-            containerOptions={{
-              needMarginLeft: true,
-            }}
-            readOnly={readOnly}
-            label="Time"
-          >
-            {readOnly ? (
-              <StyledInput value={moment(time, "HH:mm:ss").format("HH:mm")} />
-            ) : (
-              <DateTimeWrapper onPress={showTimepicker}>
-                <DateTimeText>{time}</DateTimeText>
-              </DateTimeWrapper>
-            )}
-          </Input>
-        </Row>
-        {show && (
-          <DateTimePicker
-            value={date}
-            mode={mode}
-            is24Hour
-            display="default"
-            onChange={onChangeDateTime}
-          />
-        )}
-
-        <Row>
-          <Label>Follow Up</Label>
-          <Switch
-            onValueChange={toggleFollowUp}
-            value={followUp}
-            disabled={readOnly}
-          />
-        </Row>
-        {!readOnly ? (
-          <ButtonRow>
-            <Button label="Submit" onPress={onPressSubmit} />
-          </ButtonRow>
+      <Container behavior={Platform.OS == "ios" ? "padding" : "height"}>
+        {Platform.OS === "ios" ? (
+          <Header>
+            <CloseButtonWrapper>
+              <IconButton
+                iconName="close"
+                size={32}
+                color="#000"
+                onPress={onPressClose}
+              />
+            </CloseButtonWrapper>
+            <HeaderText>Record</HeaderText>
+          </Header>
         ) : null}
-      </Form>
-    </Container>
-    {loading ? (
-        <Spinner />
-      ) : null}
+        <Form contentContainerStyle={styles.scrollView}>
+          <Row>
+            <Input
+              containerOptions={{
+                needMarginRight: true,
+              }}
+              readOnly={readOnly}
+              label="Doctor Name"
+              value={doctorName}
+              onChangeText={setDoctorName}
+            />
+            <Input
+              containerOptions={{
+                needMarginLeft: true,
+              }}
+              readOnly={readOnly}
+              label="Patient Name"
+              value={patientName}
+              onChangeText={setPatientName}
+            />
+          </Row>
+          <Row>
+            <Input
+              readOnly={readOnly}
+              label="Diagnosis"
+              value={diagnosis}
+              onChangeText={setDiagnosis}
+              multiline
+            />
+          </Row>
+          <Row>
+            <Input
+              readOnly={readOnly}
+              label="Medication"
+              value={medication}
+              onChangeText={setMedication}
+              multiline
+            />
+          </Row>
+          <Row>
+            <Input
+              readOnly={readOnly}
+              label="Consultation Fee"
+              value={consultationFee}
+              onChangeText={setConsultationFee}
+              keyboardType="decimal-pad"
+            />
+          </Row>
+          <Row>
+            <Input
+              containerOptions={{
+                needMarginRight: true,
+              }}
+              readOnly={readOnly}
+              label="Date"
+            >
+              {readOnly ? (
+                <StyledInput value={dateString} />
+              ) : (
+                <DateTimeWrapper onPress={showDatepicker}>
+                  <DateTimeText>{dateString}</DateTimeText>
+                </DateTimeWrapper>
+              )}
+            </Input>
+            <Input
+              containerOptions={{
+                needMarginLeft: true,
+              }}
+              readOnly={readOnly}
+              label="Time"
+            >
+              {readOnly ? (
+                <StyledInput value={moment(time, "HH:mm:ss").format("HH:mm")} />
+              ) : (
+                <DateTimeWrapper onPress={showTimepicker}>
+                  <DateTimeText>{time}</DateTimeText>
+                </DateTimeWrapper>
+              )}
+            </Input>
+          </Row>
+          {show && (
+            <DateTimePicker
+              value={date}
+              mode={mode}
+              is24Hour
+              display="default"
+              onChange={onChangeDateTime}
+            />
+          )}
+
+          <Row>
+            <Label>Follow Up</Label>
+            <Switch
+              onValueChange={toggleFollowUp}
+              value={followUp}
+              disabled={readOnly}
+            />
+          </Row>
+          {!readOnly ? (
+            <ButtonRow>
+              <Button label="Submit" onPress={onPressSubmit} />
+            </ButtonRow>
+          ) : null}
+        </Form>
+      </Container>
+      {loading ? <Spinner /> : null}
     </>
   );
 };
