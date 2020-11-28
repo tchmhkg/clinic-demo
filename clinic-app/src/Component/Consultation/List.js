@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { FlatList } from "react-native";
 
-import Separator from "~/Component/Separator";
+import Separator from "~/Component/Common/Separator";
 import EmptyData from "~/Component/EmptyData";
 import Item from "~/Component/Consultation/Item";
 

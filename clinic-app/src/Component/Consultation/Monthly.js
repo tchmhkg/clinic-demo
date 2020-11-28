@@ -1,15 +1,9 @@
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
-import Styled from "styled-components/native";
 
 import MonthPicker from "~/Component/MonthPicker";
 import List from "~/Component/Consultation/List";
-
-const Container = Styled.View`
-  flex: 1;
-  justify-content: center;
-  background-color: #fafafa;
-`;
+import Container from "~/Component/Common/Container";
 
 const Monthly = ({ data }) => {
   const [filteredData, setFilteredData] = useState([]);

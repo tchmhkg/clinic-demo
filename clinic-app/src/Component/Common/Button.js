@@ -23,4 +23,4 @@ const Button = ({ label, onPress, style }) => {
   );
 };
 
-export default Button;
+export default React.memo(Button);

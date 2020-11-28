@@ -1,7 +1,7 @@
 import React from "react";
 import Styled from "styled-components/native";
 import moment from "moment";
-import IconButton from "~/Component/IconButton";
+import IconButton from "~/Component/Common/IconButton";
 
 const Container = Styled.View`
   flex-direction: row;

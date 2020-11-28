@@ -17,8 +17,6 @@ const UserContextProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(undefined);
 
   const login = async (email, password) => {
-    // Use Eamil and Passowrd for login API
-    // Get token and UserInfo via Login API
     try {
       const res = await axios.post(config.host + "/api/auth/signin", {
         email,
@@ -47,8 +45,6 @@ const UserContextProvider = ({ children }) => {
   };
 
   const verifyToken = async (token) => {
-    // Use Eamil and Passowrd for login API
-    // Get token and UserInfo via Login API
     try {
       const res = await axios.post(config.host + "/api/auth/verify", {
         token,

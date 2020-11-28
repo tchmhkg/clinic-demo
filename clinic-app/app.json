@@ -19,14 +19,16 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.truman.clientapp"
+      "bundleIdentifier": "com.truman.clientapp",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.truman.clientapp"
+      "package": "com.truman.clientapp",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"

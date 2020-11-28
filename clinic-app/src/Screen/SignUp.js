@@ -1,48 +1,19 @@
 import React, { useContext, useState } from "react";
-import {
-  Alert,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { Alert } from "react-native";
 import axios from "axios";
 import Styled from "styled-components/native";
-import Button from "~/Component/Button";
-import { useNavigation } from "@react-navigation/native";
+
+import Button from "~/Component/Common/Button";
+import Input from "~/Component/Common/Input";
+import FormContainer from "~/Component/Common/FormContainer";
+
 import { UserContext } from "~/Context/User";
-import { config } from "../Config";
-
-const Container = Styled(KeyboardAvoidingView)`
-  flex: 1;
-`;
-
-const Form = Styled.ScrollView`
-  flex: 1;
-`;
-
-const Label = Styled.Text`
-  font-size: 16px;
-  margin-bottom: 5px;
-`;
-
-const Input = Styled.TextInput`
-  border: 1px solid #b0b0b0;
-  padding: 5px;
-  min-height: ${(props) => (props.multiline ? "80px" : "40px")};
-  font-size: 16px;
-`;
+import { config } from "~/Config";
 
 const Row = Styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-`;
-
-const InputWrapper = Styled.View`
-  flex: 1;
-  margin-left: ${(props) => (props.needMarginLeft ? "5px" : 0)};
-  margin-right: ${(props) => (props.needMarginRight ? "5px" : 0)};
-  margin-bottom: 10px;
 `;
 
 const ButtonRow = Styled.View`
@@ -92,7 +63,7 @@ const SignUp = () => {
   };
 
   const validatePassword = () => {
-    if(password.length < 8) {
+    if (password.length < 8) {
       Alert.alert("Password length must longer than 8 characters!");
       return false;
     }
@@ -101,7 +72,7 @@ const SignUp = () => {
       return false;
     }
     return true;
-  }
+  };
 
   const onPressRegister = () => {
     if (!(email && password && phoneNumber && clinicName && address)) {
@@ -112,7 +83,7 @@ const SignUp = () => {
       Alert.alert("Email format incorrect!");
       return;
     }
-    if(!validatePassword()) {
+    if (!validatePassword()) {
       return;
     }
     if (!password || password !== confirmPassword) {
@@ -123,86 +94,59 @@ const SignUp = () => {
   };
 
   return (
-    <Container behavior={Platform.OS == "ios" ? "padding" : "height"}>
-      <Form contentContainerStyle={styles.scrollView}>
-        <Row>
-          <InputWrapper>
-            <Label>Email</Label>
-            <Input
-              returnKeyType="done"
-              keyboardType="email-address"
-              onChangeText={setEmail}
-              value={email}
-            />
-          </InputWrapper>
-        </Row>
-        <Row>
-          <InputWrapper>
-            <Label>Password</Label>
-            <Input
-              returnKeyType="done"
-              secureTextEntry
-              onChangeText={setPassword}
-              value={password}
-            />
-          </InputWrapper>
-        </Row>
-        <Row>
-          <InputWrapper>
-            <Label>Confirm Password</Label>
-            <Input
-              secureTextEntry
-              returnKeyType="done"
-              onChangeText={setConfirmPassword}
-              value={confirmPassword}
-            />
-          </InputWrapper>
-        </Row>
-        <Row>
-          <InputWrapper>
-            <Label>Clinic Name</Label>
-            <Input
-              returnKeyType="done"
-              onChangeText={setClinicName}
-              value={clinicName}
-            />
-          </InputWrapper>
-        </Row>
-        <Row>
-          <InputWrapper>
-            <Label>Phone Number</Label>
-            <Input
-              returnKeyType="done"
-              keyboardType="phone-pad"
-              onChangeText={setPhoneNumber}
-              value={phoneNumber}
-            />
-          </InputWrapper>
-        </Row>
-        <Row>
-          <InputWrapper>
-            <Label>Address</Label>
-            <Input
-              autoCompleteType="off"
-              onChangeText={setAddress}
-              value={address}
-              multiline
-              textAlignVertical="top"
-            />
-          </InputWrapper>
-        </Row>
-        <ButtonRow>
-          <Button label="Submit" onPress={onPressRegister} />
-        </ButtonRow>
-      </Form>
-    </Container>
+    <FormContainer>
+      <Row>
+        <Input
+          label="Email"
+          value={email}
+          keyboardType="email-address"
+          onChangeText={setEmail}
+        />
+      </Row>
+      <Row>
+        <Input
+          label="Password"
+          value={password}
+          secureTextEntry
+          onChangeText={setPassword}
+        />
+      </Row>
+      <Row>
+        <Input
+          label="Confirm Password"
+          value={confirmPassword}
+          secureTextEntry
+          onChangeText={setConfirmPassword}
+        />
+      </Row>
+      <Row>
+        <Input
+          label="Clinic Name"
+          value={clinicName}
+          onChangeText={setClinicName}
+        />
+      </Row>
+      <Row>
+        <Input
+          label="Phone Number"
+          value={phoneNumber}
+          keyboardType="phone-pad"
+          onChangeText={setPhoneNumber}
+        />
+      </Row>
+      <Row>
+        <Input
+          label="Address"
+          value={address}
+          multiline
+          onChangeText={setAddress}
+        />
+      </Row>
+      <ButtonRow>
+        <Button label="Submit" onPress={onPressRegister} />
+      </ButtonRow>
+    </FormContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    padding: 15,
-  },
-});
 
 export default SignUp;

@@ -1,19 +1,13 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Alert, Dimensions } from "react-native";
-import Styled from "styled-components/native";
 import { TabView, TabBar } from "react-native-tab-view";
 import Daily from "~/Component/Consultation/Daily";
 import Weekly from "~/Component/Consultation/Weekly";
 import Monthly from "~/Component/Consultation/Monthly";
+import Container from "~/Component/Common/Container";
 import { UserContext } from "~/Context/User";
 import { config } from "~/Config";
-
-const Container = Styled.View`
-  flex: 1;
-  justify-content: center;
-  background-color: #fafafa;
-`;
 
 const VIEWS = ["daily", "weekly", "monthly"];
 
@@ -57,9 +51,9 @@ const Home = ({ navigation }) => {
     return unsubscribe;
   }, [userInfo?.id]);
 
-  const _handleIndexChange = (index) => setTabIndex(index);
+  const _handleIndexChange = useCallback((index) => setTabIndex(index), []);
 
-  const renderScene = ({ route }) => {
+  const renderScene = useCallback(({ route }) => {
     switch (route.key) {
       case "daily":
         return <Daily data={consultations} />;
@@ -68,16 +62,16 @@ const Home = ({ navigation }) => {
       case "monthly":
         return <Monthly data={consultations} />;
     }
-  };
+  }, [consultations]);
 
-  const renderTabBar = (props) => (
+  const renderTabBar = useCallback((props) => (
     <TabBar
       {...props}
       indicatorStyle={{backgroundColor: '#0ECD9D'}}
       labelStyle={{color: '#0ECD9D'}}
       style={{backgroundColor: '#ffffff'}}
     />
-  );
+  ), []);
 
   return (
     <Container>

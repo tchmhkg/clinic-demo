@@ -13,8 +13,9 @@ import Styled from "styled-components/native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-import Button from "~/Component/Button";
-import IconButton from "~/Component/IconButton";
+import Button from "~/Component/Common/Button";
+import Input from "~/Component/Common/Input";
+import IconButton from "~/Component/Common/IconButton";
 import { UserContext } from "~/Context/User";
 import { config } from "~/Config";
 
@@ -45,7 +46,7 @@ const Label = Styled.Text`
   margin-bottom: 5px;
 `;
 
-const Input = Styled.TextInput`
+const StyledInput = Styled.TextInput`
   border: 1px solid #b0b0b0;
   padding: 5px;
   min-height: ${(props) => (props.multiline ? "80px" : "40px")};
@@ -67,13 +68,6 @@ const Row = Styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-`;
-
-const InputWrapper = Styled.View`
-  flex: 1;
-  margin-left: ${(props) => (props.needMarginLeft ? "5px" : 0)};
-  margin-right: ${(props) => (props.needMarginRight ? "5px" : 0)};
-  margin-bottom: 10px;
 `;
 
 const ButtonRow = Styled.View`
@@ -148,12 +142,22 @@ const Record = () => {
   const toggleFollowUp = () => setFollowUp((prev) => !prev);
 
   const onPressSubmit = () => {
-    if(!(doctorName && patientName && diagnosis && medication && consultationFee && dateString && time)) {
-      Alert.alert('Please complete all fields');
+    if (
+      !(
+        doctorName &&
+        patientName &&
+        diagnosis &&
+        medication &&
+        consultationFee &&
+        dateString &&
+        time
+      )
+    ) {
+      Alert.alert("Please complete all fields");
       return;
     }
     submitForm();
-  }
+  };
 
   const submitForm = async () => {
     try {
@@ -199,7 +203,7 @@ const Record = () => {
   }, [navigation]);
 
   const onChangeDateTime = (event, selectedDate) => {
-    const currentDate = selectedDate || date
+    const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     if (mode === "date") {
       setDateString(moment(currentDate).format("YYYY-MM-DD"));
@@ -247,76 +251,83 @@ const Record = () => {
       ) : null}
       <Form contentContainerStyle={styles.scrollView}>
         <Row>
-          <InputWrapper needMarginRight pointerEvents={readOnly ? 'none' : 'auto'}>
-            <Label>Doctor Name</Label>
-            <Input
-              onChangeText={setDoctorName}
-              value={doctorName}
-            />
-          </InputWrapper>
-          <InputWrapper needMarginLeft pointerEvents={readOnly ? 'none' : 'auto'}>
-            <Label>Patient Name</Label>
-            <Input
-              onChangeText={setPatientName}
-              value={patientName}
-            />
-          </InputWrapper>
+          <Input
+            containerOptions={{
+              needMarginRight: true,
+            }}
+            readOnly={readOnly}
+            label="Doctor Name"
+            value={doctorName}
+            onChangeText={setDoctorName}
+          />
+          <Input
+            containerOptions={{
+              needMarginLeft: true,
+            }}
+            readOnly={readOnly}
+            label="Patient Name"
+            value={patientName}
+            onChangeText={setPatientName}
+          />
         </Row>
         <Row>
-          <InputWrapper pointerEvents={readOnly ? 'none' : 'auto'}>
-            <Label>Diagnosis</Label>
-            <Input
-              value={diagnosis}
-              onChangeText={setDiagnosis}
-              multiline
-              textAlignVertical="top"
-            />
-          </InputWrapper>
+          <Input
+            readOnly={readOnly}
+            label="Diagnosis"
+            value={diagnosis}
+            onChangeText={setDiagnosis}
+            multiline
+          />
         </Row>
         <Row>
-          <InputWrapper pointerEvents={readOnly ? 'none' : 'auto'}>
-            <Label>Medication</Label>
-            <Input
-              value={medication}
-              onChangeText={setMedication}
-              multiline
-              textAlignVertical="top"
-              // editable={!readOnly}
-            />
-          </InputWrapper>
+          <Input
+            readOnly={readOnly}
+            label="Medication"
+            value={medication}
+            onChangeText={setMedication}
+            multiline
+          />
         </Row>
         <Row>
-          <InputWrapper pointerEvents={readOnly ? 'none' : 'auto'}>
-            <Label>Consultation Fee</Label>
-            <Input
-              value={consultationFee}
-              onChangeText={setConsultationFee}
-              // editable={!readOnly}
-              keyboardType="decimal-pad"
-            />
-          </InputWrapper>
+          <Input
+            readOnly={readOnly}
+            label="Consultation Fee"
+            value={consultationFee}
+            onChangeText={setConsultationFee}
+            keyboardType="decimal-pad"
+          />
         </Row>
         <Row>
-          <InputWrapper needMarginRight pointerEvents={readOnly ? 'none' : 'auto'}>
-            <Label>Date</Label>
+          <Input
+            containerOptions={{
+              needMarginRight: true,
+            }}
+            readOnly={readOnly}
+            label="Date"
+          >
             {readOnly ? (
-              <Input value={dateString} />
+              <StyledInput value={dateString} />
             ) : (
               <DateTimeWrapper onPress={showDatepicker}>
                 <DateTimeText>{dateString}</DateTimeText>
               </DateTimeWrapper>
             )}
-          </InputWrapper>
-          <InputWrapper needMarginLeft pointerEvents={readOnly ? 'none' : 'auto'}>
-            <Label>Time</Label>
+          </Input>
+          <Input
+            containerOptions={{
+              needMarginLeft: true,
+            }}
+            readOnly={readOnly}
+            label="Time"
+          >
             {readOnly ? (
-              <Input value={moment(time, 'HH:mm:ss').format('HH:mm')} />
+              <StyledInput value={moment(time, "HH:mm:ss").format("HH:mm")} />
             ) : (
               <DateTimeWrapper onPress={showTimepicker}>
                 <DateTimeText>{time}</DateTimeText>
               </DateTimeWrapper>
             )}
-          </InputWrapper>
+          </Input>
         </Row>
         {show && (
           <DateTimePicker

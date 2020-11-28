@@ -1,16 +1,9 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Calendar } from "react-native-calendars";
-import Styled from "styled-components/native";
 
 import List from "~/Component/Consultation/List";
-
-const Container = Styled.View`
-  flex: 1;
-  justify-content: center;
-  background-color: #fafafa;
-  padding: 10px;
-`;
+import Container from "~/Component/Common/Container";
 
 const CALENDAR_THEME = {
   arrowColor: "#000000",

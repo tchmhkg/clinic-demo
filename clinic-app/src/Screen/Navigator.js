@@ -16,7 +16,7 @@ import Consultation from "~/Screen/Consultation";
 import Setting from "~/Screen/Setting";
 import Record from "~/Screen/Record";
 
-import IconButton from "~/Component/IconButton";
+import IconButton from "~/Component/Common/IconButton";
 
 const HeaderLeftButton = Styled.View`
   flex-direction: row;
