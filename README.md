@@ -40,5 +40,7 @@ Run the app
 
   1. All fields are required
   
-- Login token expiry time
-  Default 24 hours  
+- Authorization 
+  1. JWT 
+  2. Default expired after 24 hours, can edit the expiry time in ``` server/.env ```
+
