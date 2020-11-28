@@ -24,12 +24,11 @@ const UserContextProvider = ({ children }) => {
         email,
         password,
       });
-      console.log(res?.data);
+      // console.log(res?.data);
       if (res?.data?.success) {
         AsyncStorage.setItem("token", res?.data?.user?.accessToken).then(() => {
           setUserInfo(res?.data?.user);
           AsyncStorage.setItem("user", JSON.stringify(res?.data?.user));
-          console.log("success login");
         });
         return {
           success: true,
@@ -90,11 +89,6 @@ const UserContextProvider = ({ children }) => {
             console.log("verify err => ", err);
             logout();
           }
-          // console.log('call login api');
-          // setUserInfo({
-          //   name: "truman",
-          //   email: "truman@email.com",
-          // });
         }
       })
       .catch((e) => {
