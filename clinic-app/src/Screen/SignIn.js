@@ -21,20 +21,6 @@ const Form = Styled.ScrollView`
   flex: 1;
 `;
 
-const CloseButtonWrapper = Styled.View`
-  align-items: flex-end;
-`;
-
-const Header = Styled.View`
-  padding: 40px 20px 0 20px;
-`;
-
-const HeaderText = Styled.Text`
-  font-size: 20px;
-  font-weight: bold;
-  margin: 10px 0;
-`;
-
 const Label = Styled.Text`
   font-size: 16px;
   margin-bottom: 5px;
@@ -79,7 +65,7 @@ const SignIn = ({ navigation }) => {
       const res = await login(email, password);
       // console.log(res);
       if (!res?.success) {
-        Alert.alert(res?.data?.message);
+        Alert.alert(res?.message);
       }
     }
   };

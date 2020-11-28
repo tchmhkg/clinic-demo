@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
-import { config } from "../../Config";
+import { config } from "~/Config";
 
 const defaultContext = {
   userInfo: undefined,
@@ -24,7 +24,6 @@ const UserContextProvider = ({ children }) => {
         email,
         password,
       });
-      // console.log(res?.data);
       if (res?.data?.success) {
         AsyncStorage.setItem("token", res?.data?.user?.accessToken).then(() => {
           setUserInfo(res?.data?.user);
