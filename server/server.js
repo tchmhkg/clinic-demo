@@ -11,45 +11,38 @@ require("dotenv").config();
 const isProduction = process.env.NODE_ENV === "production";
 
 var corsOptions = {
-  origin: "*", //"http://localhost:3001",
+  origin: "*",
 };
 
 app.use(cors(corsOptions));
 
-// parse requests of content-type - application/json
 app.use(bodyParser.json());
 
-// parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = require("./app/models");
 const User = db.user;
 
-// Production
-// db.sequelize.sync();
-// Development
-createDb().then(() => {
-  db.sequelize.sync({ force: !isProduction }).then(() => {
-    if (!isProduction) {
-      console.log("Drop and Resync Db");
-      initial();
-    }
+createDb()
+  .then(() => {
+    db.sequelize.sync({ force: !isProduction }).then(() => {
+      if (!isProduction) {
+        console.log("Drop and Resync Db");
+        initial();
+      }
+    });
+  })
+  .catch((err) => {
+    console.log(err);
   });
-})
-.catch(err => {
-  console.log(err);
-});
 
-// simple route
 app.get("/", (req, res) => {
   res.json({ message: "Home page" });
 });
 
-// routes
 require("./app/routes/auth.routes")(app);
 require("./app/routes/consultation.routes")(app);
 
-// set port, listen for requests
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
