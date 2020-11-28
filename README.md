@@ -3,33 +3,52 @@
 ## Server
 
 Change directory to server folder and install modules
+
 ``` cd <ROOT_DIRECTORY>/server ```
+
+and
+
 ``` yarn install ```
 
 Copy .env.example file to .env
+
 ``` cp .env.example .env ```
+
 then edit .env variables
 
 Run the server
+
 ``` yarn start ```
 
 ## Clinic app
 
 Change directory to client app folder and install modules
+
 ``` cd <ROOT_DIRECTORY>/client-app ```
+
+and
+
 ``` yarn install ```
 
 Copy .env.example file to .env
+
 ``` cp .env.example .env ```
+
 then edit .env variables
 
 Run the app
+
 ``` yarn start ```
 
 - Demo account
 
-  username: ``` hqclinic@truman.com ```
-  password: ``` hq@1234 ```  
+  username: 
+  
+  ``` hqclinic@truman.com ```
+  
+  password: 
+  
+  ``` hq@1234 ```  
 
 - Registration rules
 
