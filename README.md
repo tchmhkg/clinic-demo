@@ -34,6 +34,10 @@ Copy .env.example file to .env
 
 ``` cp .env.example .env ```
 
+or use the demo server & database directly
+
+``` cp .env.demo .env ```
+
 then edit .env variables
 
 Run the app
