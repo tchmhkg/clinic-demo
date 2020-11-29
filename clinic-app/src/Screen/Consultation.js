@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useCallback, useContext, useEffect, useState, useLayoutEffect } from "react";
-import { Alert, Dimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 import { TabView, TabBar } from "react-native-tab-view";
 
 import { Daily, Weekly, Monthly } from "~/Component/Consultation";
@@ -8,6 +8,7 @@ import { Container, Spinner, IconButton } from "~/Component/Common";
 
 import { UserContext } from "~/Context/User";
 import { config } from "~/Config";
+import { alertMessage } from "~/Helper";
 
 const VIEWS = ["daily", "weekly", "monthly"];
 
@@ -16,6 +17,7 @@ const Home = ({ navigation }) => {
   const [consultations, setConsultations] = useState([]);
   const [tabIndex, setTabIndex] = useState(0);
   const [loading, setLoading] = useState(false);
+  const windowWidth = useWindowDimensions().width;
 
   const routes = VIEWS.map((view, idx) => ({
     key: view,
@@ -61,13 +63,10 @@ const Home = ({ navigation }) => {
     } catch (err) {
       setLoading(false);
       console.log(err);
-      Alert.alert(err?.response?.data?.message, "", [
-        {
-          text: "OK",
-          onPress: () => (err?.response?.status === 401 ? logout() : {}),
-          style: "cancel",
-        },
-      ]);
+      alertMessage({
+        message: err?.response?.data?.message,
+        onPress: () => (err?.response?.status === 401 ? logout() : {}),
+      });
     }
   }
 
@@ -103,7 +102,7 @@ const Home = ({ navigation }) => {
         renderScene={renderScene}
         renderTabBar={renderTabBar}
         onIndexChange={_handleIndexChange}
-        initialLayout={{ width: Dimensions.get("window").width }}
+        initialLayout={{ width: windowWidth }}
       />
     </Container>
     {loading ? (

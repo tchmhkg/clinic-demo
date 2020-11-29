@@ -1,3 +1,7 @@
+import { Alert } from 'react-native';
+
+const GENERAL_ERR_MESSAGE = 'Network Error';
+
 export const dollarFormat = (amount, decimalCount = 2, decimal = ".", thousands = ",") => {
     try {
       decimalCount = Math.abs(decimalCount);
@@ -14,3 +18,13 @@ export const dollarFormat = (amount, decimalCount = 2, decimal = ".", thousands 
       return false;
     }
 };
+
+export const alertMessage = ({message = GENERAL_ERR_MESSAGE, onPress = () => {}}) => {
+    Alert.alert(message, "", [
+    {
+        text: "OK",
+        onPress: () => onPress(),
+        style: "cancel",
+    },
+    ]);
+}

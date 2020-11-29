@@ -5,7 +5,6 @@ import {
   Switch,
   Platform,
   StyleSheet,
-  Alert,
   KeyboardAvoidingView,
   TouchableOpacity,
 } from "react-native";
@@ -17,6 +16,7 @@ import { Button, Input, IconButton, Spinner } from "~/Component/Common";
 
 import { UserContext } from "~/Context/User";
 import { config } from "~/Config";
+import { alertMessage } from "~/Helper";
 
 const Container = Styled(KeyboardAvoidingView)`
   flex: 1;
@@ -129,14 +129,11 @@ const Record = () => {
       } catch (err) {
         console.log(err);
         setLoading(false);
-        Alert.alert(err?.response?.data?.message, "", [
-          {
-            text: "OK",
-            onPress: () =>
-              err?.response?.status === 401 ? logout() : navigation.pop(),
-            style: "cancel",
-          },
-        ]);
+        alertMessage({
+          message: err?.response?.data?.message,
+          onPress: () =>
+            err?.response?.status === 401 ? logout() : navigation.pop(),
+        });
       }
     };
     if (consultationId) {
@@ -158,7 +155,9 @@ const Record = () => {
         time
       )
     ) {
-      Alert.alert("Please complete all fields");
+      alertMessage({
+        message: "Please complete all fields.",
+      });
       return;
     }
     submitForm();
@@ -187,23 +186,17 @@ const Record = () => {
         }
       );
       setLoading(false);
-      Alert.alert(res?.data?.message, "", [
-        {
-          text: "OK",
-          onPress: () => (res?.data?.success ? navigation.pop() : {}),
-          style: "cancel",
-        },
-      ]);
+      alertMessage({
+        message: res?.data?.message,
+        onPress: () => (res?.data?.success ? navigation.pop() : {}),
+      });
     } catch (err) {
       console.log(err);
       setLoading(false);
-      Alert.alert(err?.response?.data?.message, "", [
-        {
-          text: "OK",
-          onPress: () => (err?.response?.status === 401 ? logout() : {}),
-          style: "cancel",
-        },
-      ]);
+      alertMessage({
+        message: err?.response?.data?.message,
+        onPress: () => (err?.response?.status === 401 ? logout() : {}),
+      });
     }
   };
   const onPressClose = useCallback(() => {

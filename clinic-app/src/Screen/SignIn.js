@@ -34,6 +34,8 @@ const SignIn = ({ navigation }) => {
         Alert.alert(res?.message);
       }
       setLoading(false);
+    } else {
+      Alert.alert("Email & Password cannot empty.");
     }
   };
 
